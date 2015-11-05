@@ -10,10 +10,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
 /**
@@ -50,6 +47,7 @@ public class GradesUI extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         gradeItem = new javax.swing.JComboBox();
         jButton2 = new javax.swing.JButton();
+        warningLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,7 +77,7 @@ public class GradesUI extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 81, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,6 +105,8 @@ public class GradesUI extends javax.swing.JFrame {
             }
         });
 
+        warningLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,16 +116,18 @@ public class GradesUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(itemTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                            .addComponent(gradeItem, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(gradeItem, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(itemTextField))
                         .addGap(18, 18, 18)
                         .addComponent(jButton2)
-                        .addGap(70, 70, 70)
+                        .addGap(62, 62, 62)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(createCSV, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))))
+                            .addComponent(createCSV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(warningLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -137,7 +139,9 @@ public class GradesUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(itemTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(warningLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(gradeItem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(createCSV)
@@ -151,7 +155,7 @@ public class GradesUI extends javax.swing.JFrame {
     private void createCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createCSVActionPerformed
         selectFolder();
         CreateCSV csv = new CreateCSV(items, savePath);
-        
+
         File file;
         file = new File(savePath);
         Desktop desktop = Desktop.getDesktop();
@@ -171,19 +175,25 @@ public class GradesUI extends javax.swing.JFrame {
     }//GEN-LAST:event_gradeItemActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (validateString() == true){
-        items.add(itemTextField.getText() + " Points Grade");
+        if (validateString() == true) {
+            items.add(itemTextField.getText() + " Points Grade");
 
-        gradeItem.setModel(new DefaultComboBoxModel());
-        items.stream().forEach((item) -> {
-            System.out.println(item);
-            gradeItem.addItem(item);
-        });
+            gradeItem.setModel(new DefaultComboBoxModel());
+            items.stream().forEach((item) -> {
+                System.out.println(item);
+                gradeItem.addItem(item);
+            });
+            
+            warningLabel.setText("Item added successfully!");
+
+        } else {
+            warningLabel.setText("Item not added! Check requirements!");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+        items.remove(gradeItem.getSelectedIndex());
+        gradeItem.removeItemAt(gradeItem.getSelectedIndex());
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -237,26 +247,24 @@ public class GradesUI extends javax.swing.JFrame {
             System.out.println("No Selection ");
         }
     }
-    
-    public boolean validateString(){
+
+    public boolean validateString() {
         String getText = itemTextField.getText();
         boolean isValid = true;
-        
-                    if (getText.contains(",") || getText.contains("\"") || getText.contains("*") ||
-                    getText.contains("<") || getText.contains(">") || getText.contains("+") ||
-                    getText.contains("=") || getText.contains("|") || getText.contains("%")){
-                return false;
-            }
-        
-        
-        for (String item: items){
-            if (item.contains(getText)){
+
+        if (getText.contains(",") || getText.contains("\"") || getText.contains("*")
+                || getText.contains("<") || getText.contains(">") || getText.contains("+")
+                || getText.contains("=") || getText.contains("|") || getText.contains("%")) {
+            return false;
+        }
+
+        for (String item : items) {
+            if (item.contains(getText)) {
                 return false;
             }
 
-            
         }
-        
+
         return true;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -267,5 +275,6 @@ public class GradesUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private java.awt.Label label1;
+    private javax.swing.JLabel warningLabel;
     // End of variables declaration//GEN-END:variables
 }
