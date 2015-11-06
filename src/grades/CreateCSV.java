@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class CreateCSV {
 
     private ArrayList<String> gradeItem = new ArrayList<>();
-    private String sFileName;
 
     public CreateCSV(ArrayList<String> item, String savePath) {
 
@@ -25,7 +24,7 @@ public class CreateCSV {
 
         try {
             gradeItem = item;
-            
+
             writer = new FileWriter(new File(savePath + "\\Grade Export.csv"));
 
             writer.append("OrgDefinedId");
